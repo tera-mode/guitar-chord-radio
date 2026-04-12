@@ -30,8 +30,17 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — APIキー・Firebase設定などの機密情報を含むため絶対にコミット禁止
+# .env.local.example のみ（値なしのテンプレート）はコミット可
+.env.local
+.env*.local
+.env.production
+.env.development
+# ↓ NEXT_PUBLIC_ 付きの変数はブラウザに露出するため機密情報を入れないこと
+# ↓ YOUTUBE_API_KEY は NEXT_PUBLIC_ なし（サーバーサイド専用）で使うこと
+
+# Playwright テスト生成物
+.playwright-mcp/
 
 # vercel
 .vercel
