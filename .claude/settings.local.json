@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/User/Documents/**)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\User\\Documents\\anokoro-channel"
+    ]
+  }
+}
