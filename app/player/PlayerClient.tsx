@@ -36,6 +36,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   const [favLoaded, setFavLoaded] = useState(false)
   // 曲が自然に終わって次曲へ遷移した場合のみtrue。リロード時はfalseにリセットされる
   const [shouldAutoplay, setShouldAutoplay] = useState(false)
+  const [songHistory, setSongHistory] = useState<Song[]>([])
 
   const transitioning = useRef(false)
   const ytRef = useRef<YouTubePlayerRef>(null)
@@ -105,8 +106,18 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   const nextSong = useCallback(() => {
     if (transitioning.current) return
     transitioning.current = true
-    setSong((current) => getRandomSongFromList(songList, current ?? undefined))
+    setSong((current) => {
+      if (current) setSongHistory((h) => [...h, current])
+      return getRandomSongFromList(songList, current ?? undefined)
+    })
   }, [songList])
+
+  const prevSong = useCallback(() => {
+    if (songHistory.length === 0) return
+    const prev = songHistory[songHistory.length - 1]
+    setSongHistory((h) => h.slice(0, -1))
+    setSong(prev)
+  }, [songHistory])
 
   const handleEnded = useCallback(() => {
     if (playMode === 'autoplay') {
@@ -139,15 +150,26 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
     <div className="flex flex-col min-h-screen">
       {/* ヘッダー */}
       <header className="flex items-center px-4 py-2 bg-white border-b border-gray-200 sticky top-0 z-10">
-        {/* 左: 戻る */}
-        <Link
-          href="/"
-          className="flex flex-col items-center gap-0.5 w-12 text-gray-500 hover:text-gray-900 transition-colors"
-          aria-label="ホームへ戻る"
-        >
-          <span className="text-lg leading-none">←</span>
-          <span className="text-xs">戻る</span>
-        </Link>
+        {/* 左: 戻る + 前の曲 */}
+        <div className="flex items-center gap-1">
+          <Link
+            href="/"
+            className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            aria-label="ホームへ戻る"
+          >
+            <span className="text-base leading-none">←</span>
+            <span className="text-xs">戻る</span>
+          </Link>
+          <button
+            onClick={prevSong}
+            disabled={songHistory.length === 0}
+            className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-gray-500 hover:text-gray-900 hover:bg-gray-100 disabled:hover:bg-transparent"
+            aria-label="前の曲"
+          >
+            <span className="text-base leading-none">⏮</span>
+            <span className="text-xs">前の曲</span>
+          </button>
+        </div>
 
         {/* 中央: 再生モード（3ボタン） */}
         <div className="flex-1 flex justify-center gap-1">
