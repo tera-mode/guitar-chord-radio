@@ -98,17 +98,6 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
     })
   }, [song])
 
-  const cyclePlayMode = useCallback(() => {
-    setPlayMode((prev) => {
-      const idx = PLAY_MODES.indexOf(prev)
-      const next = PLAY_MODES[(idx + 1) % PLAY_MODES.length]
-      try {
-        localStorage.setItem('gcr-play-mode', next)
-      } catch {}
-      return next
-    })
-  }, [])
-
   const songList = isFavoritesMode ? favSongs : decadeSongs
 
   const nextSong = useCallback(() => {
@@ -157,16 +146,30 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
           <span className="text-xs">戻る</span>
         </Link>
 
-        {/* 中央: 再生モード */}
-        <div className="flex-1 flex justify-center">
-          <button
-            onClick={cyclePlayMode}
-            className="flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl hover:bg-gray-100 transition-colors"
-            aria-label={`再生モード: ${PLAY_MODE_LABEL[playMode]}`}
-          >
-            <span className="text-lg leading-none">{PLAY_MODE_ICON[playMode]}</span>
-            <span className="text-xs text-gray-500">{PLAY_MODE_LABEL[playMode]}</span>
-          </button>
+        {/* 中央: 再生モード（3ボタン） */}
+        <div className="flex-1 flex justify-center gap-1">
+          {PLAY_MODES.map((mode) => {
+            const active = playMode === mode
+            return (
+              <button
+                key={mode}
+                onClick={() => {
+                  setPlayMode(mode)
+                  try { localStorage.setItem('gcr-play-mode', mode) } catch {}
+                }}
+                className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${
+                  active
+                    ? 'bg-amber-500 text-white'
+                    : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
+                }`}
+                aria-label={PLAY_MODE_LABEL[mode]}
+                aria-pressed={active}
+              >
+                <span className="text-base leading-none">{PLAY_MODE_ICON[mode]}</span>
+                <span className="text-xs">{PLAY_MODE_LABEL[mode]}</span>
+              </button>
+            )
+          })}
         </div>
 
         {/* 右: 次の曲 */}
