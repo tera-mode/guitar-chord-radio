@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
+import { Icon } from '@iconify/react'
 import { Song, Source, PlayMode, Decade } from '@/types'
 import YouTubePlayer, { YouTubePlayerRef } from '@/components/player/YouTubePlayer'
 import ChordSheet from '@/components/player/ChordSheet'
@@ -16,9 +17,9 @@ type Props = {
 
 const PLAY_MODES: PlayMode[] = ['off', 'autoplay', 'repeat-one']
 const PLAY_MODE_ICON: Record<PlayMode, string> = {
-  off: '⏹',
-  autoplay: '⏭',
-  'repeat-one': '🔂',
+  off: 'mdi:stop-circle-outline',
+  autoplay: 'mdi:skip-next-circle-outline',
+  'repeat-one': 'mdi:repeat-once',
 }
 const PLAY_MODE_LABEL: Record<PlayMode, string> = {
   off: '停止',
@@ -157,7 +158,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
             className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
             aria-label="ホームへ戻る"
           >
-            <span className="text-base leading-none">←</span>
+            <Icon icon="mdi:home" className="text-xl" />
             <span className="text-xs">戻る</span>
           </Link>
           <button
@@ -166,7 +167,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
             className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-gray-500 hover:text-gray-900 hover:bg-gray-100 disabled:hover:bg-transparent"
             aria-label="前の曲"
           >
-            <span className="text-base leading-none">⏮</span>
+            <Icon icon="mdi:skip-previous" className="text-xl" />
             <span className="text-xs">前の曲</span>
           </button>
         </div>
@@ -190,7 +191,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
                 aria-label={PLAY_MODE_LABEL[mode]}
                 aria-pressed={active}
               >
-                <span className="text-base leading-none">{PLAY_MODE_ICON[mode]}</span>
+                <Icon icon={PLAY_MODE_ICON[mode]} className="text-xl" />
                 <span className="text-xs">{PLAY_MODE_LABEL[mode]}</span>
               </button>
             )
@@ -203,7 +204,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
           className="flex flex-col items-center gap-0.5 w-12 text-gray-500 hover:text-gray-900 transition-colors"
           aria-label="次の曲"
         >
-          <span className="text-lg leading-none">⏩</span>
+          <Icon icon="mdi:skip-next" className="text-xl" />
           <span className="text-xs">次の曲</span>
         </button>
       </header>
