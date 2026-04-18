@@ -1,5 +1,9 @@
 export type Decade = '80s' | '90s' | '2000s'
 
+export type Source = Decade | 'favorites'
+
+export type PlayMode = 'off' | 'autoplay' | 'repeat-one'
+
 export type Difficulty = 'easy' | 'medium' | 'hard'
 
 export type Genre = 'jpop' | 'rock' | 'pops' | 'other'

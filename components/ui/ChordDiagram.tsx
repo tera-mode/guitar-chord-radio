@@ -7,6 +7,7 @@
 type Props = {
   name: string
   compact?: boolean
+  extraCompact?: boolean
 }
 
 type DiagramData = {
@@ -84,6 +85,91 @@ const DIAGRAMS: Record<string, DiagramData> = {
     baseFret: 4,
     barre: [4, 1],
   },
+  // 7th chords
+  D7: {
+    strings: ['-', '-', 'o', 'o', 'o', 'x'],
+    frets: [[3, 2], [2, 1], [1, 2]],
+    baseFret: 1,
+  },
+  G7: {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[6, 3], [5, 2], [1, 1]],
+    baseFret: 1,
+  },
+  C7: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[5, 3], [4, 2], [3, 3], [2, 1]],
+    baseFret: 1,
+  },
+  E7: {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[5, 2], [3, 1], [2, 3]],
+    baseFret: 1,
+  },
+  A7: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[4, 2], [2, 2]],
+    baseFret: 1,
+  },
+  B7: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[5, 2], [4, 1], [3, 2], [1, 2]],
+    baseFret: 1,
+  },
+  Em7: {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[5, 2], [4, 2], [2, 3]],
+    baseFret: 1,
+  },
+  Am7: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[4, 2], [2, 1]],
+    baseFret: 1,
+  },
+  Dm7: {
+    strings: ['-', '-', 'o', 'o', 'o', 'x'],
+    frets: [[3, 2], [2, 1], [1, 1]],
+    baseFret: 1,
+  },
+  // バレーコード
+  'F#m': {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[5, 4], [4, 4]],
+    baseFret: 2,
+    barre: [2, 1],
+  },
+  'G#m': {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[5, 6], [4, 6], [3, 5]],
+    baseFret: 4,
+    barre: [4, 1],
+  },
+  // sus4 / maj7
+  Fmaj7: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[5, 3], [4, 3], [3, 2], [2, 1]],
+    baseFret: 1,
+  },
+  Cmaj7: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[5, 3], [4, 2]],
+    baseFret: 1,
+  },
+  Dsus4: {
+    strings: ['-', '-', 'o', 'o', 'o', 'x'],
+    frets: [[3, 2], [2, 3], [1, 3]],
+    baseFret: 1,
+  },
+  Asus4: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[4, 2], [3, 2], [2, 3]],
+    baseFret: 1,
+  },
+  Esus4: {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[5, 2], [4, 2], [3, 2]],
+    baseFret: 1,
+  },
 }
 
 const STRING_COUNT = 6
@@ -111,16 +197,27 @@ const SIZES = {
     FONT: 9,
     SMALL_FONT: 6,
   },
+  'extra-compact': {
+    W: 82, H: 50,
+    ML: 12,
+    MR: 5,
+    MT: 11,
+    MB: 2,
+    DOT_R: 3,
+    FONT: 7,
+    SMALL_FONT: 5,
+  },
 }
 
-export default function ChordDiagram({ name, compact = false }: Props) {
+export default function ChordDiagram({ name, compact = false, extraCompact = false }: Props) {
   const data = DIAGRAMS[name]
-  const { W, H, ML, MR, MT, MB, DOT_R, FONT, SMALL_FONT } = SIZES[compact ? 'compact' : 'normal']
+  const sizeKey = extraCompact ? 'extra-compact' : compact ? 'compact' : 'normal'
+  const { W, H, ML, MR, MT, MB, DOT_R, FONT, SMALL_FONT } = SIZES[sizeKey]
 
   const gridW = W - ML - MR
   const gridH = H - MT - MB
-  const FRET_SPACING = gridW / FRET_COUNT        // フレット幅
-  const STRING_SPACING = gridH / (STRING_COUNT - 1) // 弦間隔
+  const FRET_SPACING = gridW / FRET_COUNT
+  const STRING_SPACING = gridH / (STRING_COUNT - 1)
 
   if (!data) {
     return (
@@ -135,15 +232,9 @@ export default function ChordDiagram({ name, compact = false }: Props) {
 
   const { strings, frets, baseFret, barre } = data
 
-  // 弦番号(1=1弦=上) → y座標
   const strY = (str: number) => MT + (str - 1) * STRING_SPACING
-
-  // フレット番号 → x座標（フレット空間の中央）
   const fretX = (fret: number) => ML + (fret - baseFret + 0.5) * FRET_SPACING
-
-  // strings配列のindex → 弦番号(1=1弦)
-  // strings[0]=6弦, strings[5]=1弦
-  const strNumFromIdx = (i: number) => STRING_COUNT - i  // i=0→6, i=5→1
+  const strNumFromIdx = (i: number) => STRING_COUNT - i
 
   return (
     <div className="flex flex-col items-center">
@@ -158,7 +249,7 @@ export default function ChordDiagram({ name, compact = false }: Props) {
 
         {/* ナット（太線）or baseFret番号 */}
         {baseFret === 1 ? (
-          <rect x={ML} y={MT} width={compact ? 3 : 4} height={gridH} fill="#1f2937" />
+          <rect x={ML} y={MT} width={compact || extraCompact ? 3 : 4} height={gridH} fill="#1f2937" />
         ) : (
           <text x={ML - 2} y={MT + gridH / 2 + 3} textAnchor="end" fontSize={SMALL_FONT} fill="#6b7280">
             {baseFret}fr
@@ -185,11 +276,11 @@ export default function ChordDiagram({ name, compact = false }: Props) {
           />
         ))}
 
-        {/* バレーコード（縦方向の丸棒） */}
+        {/* バレーコード */}
         {barre && (() => {
           const cx = fretX(barre[0])
-          const y1 = strY(barre[1])          // 最高弦（上）
-          const y2 = strY(STRING_COUNT)       // 6弦（下）
+          const y1 = strY(barre[1])
+          const y2 = strY(STRING_COUNT)
           return (
             <rect
               x={cx - DOT_R}
@@ -213,13 +304,13 @@ export default function ChordDiagram({ name, compact = false }: Props) {
           />
         ))}
 
-        {/* 開放弦・ミュート記号（ナットの左側） */}
+        {/* 開放弦・ミュート記号 */}
         {strings.map((s, idx) => {
           const str = strNumFromIdx(idx)
           const y = strY(str)
-          const cx = ML - (compact ? 8 : 11)
-          const r = compact ? 2.5 : 4
-          const cr = compact ? 2 : 3
+          const cx = ML - (extraCompact ? 6 : compact ? 8 : 11)
+          const r = extraCompact ? 2 : compact ? 2.5 : 4
+          const cr = extraCompact ? 1.5 : compact ? 2 : 3
 
           if (s === 'o') {
             return (

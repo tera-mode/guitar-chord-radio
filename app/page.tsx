@@ -56,6 +56,19 @@ export default function HomePage() {
             <span className="absolute right-5 text-xl opacity-60">→</span>
           </Link>
         ))}
+
+        {/* お気に入りカード */}
+        <Link
+          href="/player?source=favorites"
+          className="relative flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-pink-400 to-rose-500 text-white shadow-md hover:shadow-lg hover:scale-[1.02] transition-all active:scale-[0.98]"
+        >
+          <span className="text-3xl">❤️</span>
+          <div>
+            <div className="text-xl font-bold">お気に入り</div>
+            <div className="text-sm opacity-80 mt-0.5">保存した曲を聴く</div>
+          </div>
+          <span className="absolute right-5 text-xl opacity-60">→</span>
+        </Link>
       </div>
 
       <p className="mt-12 text-xs text-gray-300">

@@ -48,3 +48,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playtest artifacts
+docs/playtests/screenshots/
+docs/playtests/notes/
