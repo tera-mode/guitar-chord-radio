@@ -1,4 +1,4 @@
-# あの頃チャンネル — 機能追加指示書
+# ギターコードラジオ — 機能追加指示書
 
 ## 概要
 
@@ -90,7 +90,7 @@
 - `app/player/PlayerClient.tsx` に `playMode` 状態を追加
 - 型は `types/index.ts` に追加: `export type PlayMode = 'off' | 'autoplay' | 'repeat-one'`
 - 初期値は `autoplay`(現状の挙動を維持)
-- localStorageキー `anokoro-play-mode` で永続化
+- localStorageキー `gcr-play-mode` で永続化
 
 **動作変更**
 - 現状 `YouTubePlayer` の `onEnded` に `nextSong` をそのまま渡しているのを以下に変更:
@@ -142,7 +142,7 @@
 **`app/player/PlayerClient.tsx`**
 - props を `{ source: Source, initialSong?: Song }` に拡張
 - `source === 'favorites'` の場合:
-  - localStorageから `anokoro-favorites`(曲IDリスト)を読み取り
+  - localStorageから `gcr-favorites`(曲IDリスト)を読み取り
   - `lib/songs/index.ts` の `getSongsByIds(ids)` で対象曲を取得
   - その中からランダムで初期曲をセット
   - 0件なら「お気に入りに曲を追加してください」というUIを表示し、年代選択に戻るボタンを置く

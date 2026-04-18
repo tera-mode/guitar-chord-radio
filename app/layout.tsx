@@ -12,9 +12,18 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+// TODO: ファビコン (app/icon.png) は後日差し替え予定
+// TODO: OGP画像 (app/opengraph-image.png) は後日差し替え予定
+
 export const metadata: Metadata = {
-  title: 'あの頃チャンネル',
-  description: 'ギターを手に取ったら、あの頃の曲がすぐ弾ける',
+  metadataBase: new URL('https://guitar-chord-radio.life'),
+  title: 'ギターコードラジオ',
+  description: '年代を選ぶだけで、懐かしの曲が次々流れる。コード譜とYouTubeを同時表示するギター弾き語りラジオ',
+  openGraph: {
+    title: 'ギターコードラジオ',
+    description: '年代を選ぶだけで、懐かしの曲が次々流れる。コード譜とYouTubeを同時表示するギター弾き語りラジオ',
+    url: 'https://guitar-chord-radio.life',
+  },
 }
 
 export default function RootLayout({

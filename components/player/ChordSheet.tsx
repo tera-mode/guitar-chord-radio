@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Song } from '@/types'
 import ChordPopup from '@/components/ui/ChordPopup'
 import ChordDiagram from '@/components/ui/ChordDiagram'
@@ -26,6 +27,13 @@ function uniqueChords(song: Song): string[] {
 
 export default function ChordSheet({ song, isFavorite, onToggleFavorite }: Props) {
   const chords = uniqueChords(song)
+  const [heartBounce, setHeartBounce] = useState(false)
+
+  const handleFavorite = () => {
+    setHeartBounce(true)
+    onToggleFavorite()
+    setTimeout(() => setHeartBounce(false), 300)
+  }
 
   return (
     <div className="flex flex-col gap-3 h-full">
@@ -41,8 +49,8 @@ export default function ChordSheet({ song, isFavorite, onToggleFavorite }: Props
           )}
         </div>
         <button
-          onClick={onToggleFavorite}
-          className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0"
+          onClick={handleFavorite}
+          className={`p-1.5 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 transition-transform ${heartBounce ? 'scale-125' : 'scale-100'}`}
           aria-label={isFavorite ? 'お気に入りを解除' : 'お気に入りに追加'}
         >
           <span className="text-xl">{isFavorite ? '❤️' : '🤍'}</span>
@@ -54,40 +62,23 @@ export default function ChordSheet({ song, isFavorite, onToggleFavorite }: Props
         <div>
           <h2 className="text-xl font-bold text-gray-900">{song.title}</h2>
           <p className="text-sm text-gray-500 mt-0.5">{song.artist} • {song.year}年</p>
-          <div className="flex gap-2 mt-2">
-            {song.capo > 0 && (
-              <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full font-mono">
-                カポ {song.capo}
-              </span>
-            )}
-            <span className={`px-2 py-0.5 text-xs rounded-full ${
-              song.difficulty === 'easy'
-                ? 'bg-green-100 text-green-700'
-                : song.difficulty === 'medium'
-                ? 'bg-yellow-100 text-yellow-700'
-                : 'bg-red-100 text-red-700'
-            }`}>
-              {song.difficulty === 'easy' ? '初級' : song.difficulty === 'medium' ? '中級' : '上級'}
-            </span>
-          </div>
+          {song.capo > 0 && (
+            <span className="mt-2 inline-block text-xs text-blue-600 font-mono">♪{song.capo}</span>
+          )}
         </div>
         <button
-          onClick={onToggleFavorite}
-          className="flex flex-col items-center gap-0.5 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          onClick={handleFavorite}
+          className={`p-2 rounded-lg hover:bg-gray-100 transition-colors transition-transform ${heartBounce ? 'scale-125' : 'scale-100'}`}
           aria-label={isFavorite ? 'お気に入りを解除' : 'お気に入りに追加'}
         >
           <span className="text-2xl">{isFavorite ? '❤️' : '🤍'}</span>
-          <span className="text-xs text-gray-400">お気に入り</span>
         </button>
       </div>
 
       <hr className="border-gray-200" />
 
-      {/* 使用コード一覧: モバイルはextra-compact */}
+      {/* 使用コード一覧 */}
       <div>
-        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
-          使用コード一覧
-        </div>
         {/* モバイル: extra-compact */}
         <div className="flex gap-1.5 overflow-x-auto pb-1 md:hidden">
           {chords.map((chord) => (
@@ -123,17 +114,6 @@ export default function ChordSheet({ song, isFavorite, onToggleFavorite }: Props
           </div>
         ))}
       </div>
-
-      {/* タグ */}
-      {song.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1 pt-2 border-t border-gray-100">
-          {song.tags.map((tag, i) => (
-            <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

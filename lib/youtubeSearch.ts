@@ -1,7 +1,7 @@
 // YouTube動画IDをAPIで検索し、ローカルストレージにキャッシュする
 // API呼び出しを最小限に抑えるため、一度取得したIDはキャッシュに保存
 
-const CACHE_KEY = 'anokoro-yt-cache'
+const CACHE_KEY = 'gcr-yt-cache'
 const PLACEHOLDER_ID = 'dQw4w9WgXcQ'
 
 type Cache = Record<string, string> // songId → videoId

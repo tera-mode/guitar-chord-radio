@@ -15,6 +15,10 @@ export function getRandomSongByDecade(decade: string): Song | null {
   return filtered[Math.floor(Math.random() * filtered.length)]
 }
 
+export function getSongById(id: string): Song | null {
+  return allSongs.find((s) => s.id === id) ?? null
+}
+
 export function getSongsByIds(ids: string[]): Song[] {
   const idSet = new Set(ids)
   return allSongs.filter((s) => idSet.has(s.id))

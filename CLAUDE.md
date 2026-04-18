@@ -1,8 +1,8 @@
-# あの頃チャンネル — Claude Code 作業ガイド
+# ギターコードラジオ — Claude Code 作業ガイド
 
 ## プロジェクト概要
 
-「ギターを手に取ったら、あの頃の曲がすぐ弾ける」をコンセプトにした個人用Webアプリ。
+「ギターを構えた30秒後には、もう弾いている」をコンセプトにした個人用Webアプリ。
 年代を選ぶとヒット曲がランダム表示され、YouTubeで再生しながらコード譜を確認できる。
 
 詳細要件: [docs/requirements.md](docs/requirements.md)
@@ -43,7 +43,7 @@ docs/
 ## 開発サーバー
 
 ```bash
-cd C:\Users\User\Documents\anokoro-channel
+cd E:\dev\guitar-chord-radio
 npm run dev
 # http://localhost:3000
 ```
