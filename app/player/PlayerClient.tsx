@@ -20,6 +20,11 @@ const PLAY_MODE_ICON: Record<PlayMode, string> = {
   autoplay: '⏭',
   'repeat-one': '🔂',
 }
+const PLAY_MODE_LABEL: Record<PlayMode, string> = {
+  off: '停止',
+  autoplay: '自動',
+  'repeat-one': 'リピート',
+}
 
 export default function PlayerClient({ initialSong, source, songId }: Props) {
   const [song, setSong] = useState<Song | null>(initialSong ?? null)
@@ -29,8 +34,6 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   const [playMode, setPlayMode] = useState<PlayMode>('autoplay')
   const [favSongs, setFavSongs] = useState<Song[]>([])
   const [favLoaded, setFavLoaded] = useState(false)
-  const [isMuted, setIsMuted] = useState(true)
-  const [hintShown, setHintShown] = useState(true)
 
   const transitioning = useRef(false)
   const ytRef = useRef<YouTubePlayerRef>(null)
@@ -62,9 +65,6 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
       if (storedMode && PLAY_MODES.includes(storedMode)) {
         setPlayMode(storedMode)
       }
-
-      const hintSeen = localStorage.getItem('gcr-hint-unmute-shown')
-      setHintShown(!!hintSeen)
     } catch {}
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -125,15 +125,6 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
     }
   }, [playMode, nextSong])
 
-  const handleUnmute = useCallback(() => {
-    ytRef.current?.unmute()
-    setIsMuted(false)
-    if (!hintShown) {
-      try { localStorage.setItem('gcr-hint-unmute-shown', '1') } catch {}
-      setHintShown(true)
-    }
-  }, [hintShown])
-
   if (isFavoritesMode && favLoaded && favSongs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-6 text-center">
@@ -155,15 +146,38 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   return (
     <div className="flex flex-col min-h-screen">
       {/* ヘッダー */}
-      <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="flex items-center px-4 py-2 bg-white border-b border-gray-200 sticky top-0 z-10">
+        {/* 左: 戻る */}
         <Link
           href="/"
-          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex flex-col items-center gap-0.5 w-12 text-gray-500 hover:text-gray-900 transition-colors"
           aria-label="ホームへ戻る"
         >
-          <span className="text-lg">←</span>
+          <span className="text-lg leading-none">←</span>
+          <span className="text-xs">戻る</span>
         </Link>
-        <div className="w-8" />
+
+        {/* 中央: 再生モード */}
+        <div className="flex-1 flex justify-center">
+          <button
+            onClick={cyclePlayMode}
+            className="flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl hover:bg-gray-100 transition-colors"
+            aria-label={`再生モード: ${PLAY_MODE_LABEL[playMode]}`}
+          >
+            <span className="text-lg leading-none">{PLAY_MODE_ICON[playMode]}</span>
+            <span className="text-xs text-gray-500">{PLAY_MODE_LABEL[playMode]}</span>
+          </button>
+        </div>
+
+        {/* 右: 次の曲 */}
+        <button
+          onClick={nextSong}
+          className="flex flex-col items-center gap-0.5 w-12 text-gray-500 hover:text-gray-900 transition-colors"
+          aria-label="次の曲"
+        >
+          <span className="text-lg leading-none">⏩</span>
+          <span className="text-xs">次の曲</span>
+        </button>
       </header>
 
       {/* メインコンテンツ */}
@@ -179,10 +193,6 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
               ref={ytRef}
               videoId={videoId}
               onEnded={handleEnded}
-              autoplay
-              onUnmute={handleUnmute}
-              isMuted={isMuted}
-              showUnmuteHint={!hintShown}
             />
           )}
         </div>
@@ -198,38 +208,6 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
           )}
         </div>
       </main>
-
-      {/* フッター */}
-      <footer className="sticky bottom-0 bg-white border-t border-gray-200 px-4 py-2">
-        <div className="max-w-6xl mx-auto flex items-center justify-center gap-4">
-          {/* 再生モード切替 */}
-          <button
-            onClick={cyclePlayMode}
-            className="flex items-center justify-center px-3 py-1.5 rounded-xl hover:bg-gray-100 transition-colors"
-            aria-label={`再生モード: ${playMode}`}
-          >
-            <span className="text-lg leading-none">{PLAY_MODE_ICON[playMode]}</span>
-          </button>
-
-          {/* 次の曲（PC のみ） */}
-          <button
-            onClick={nextSong}
-            className="hidden lg:flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm shadow-md transition-colors active:scale-95"
-          >
-            <span>次の曲</span>
-            <span>→</span>
-          </button>
-        </div>
-      </footer>
-
-      {/* フローティング「次の曲」ボタン（モバイルのみ） */}
-      <button
-        onClick={nextSong}
-        className="lg:hidden fixed bottom-16 right-4 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xl shadow-lg flex items-center justify-center active:scale-95 transition-all z-20"
-        aria-label="次の曲"
-      >
-        ⏩
-      </button>
     </div>
   )
 }

@@ -45,7 +45,7 @@ export default function ChordSheet({ song, isFavorite, onToggleFavorite }: Props
             <span className="font-normal text-gray-500 ml-1">· {song.artist}</span>
           </p>
           {song.capo > 0 && (
-            <span className="text-xs text-blue-600 font-mono">♪{song.capo}</span>
+            <span className="text-xs text-blue-600 font-mono">カポ {song.capo}</span>
           )}
         </div>
         <button
@@ -63,7 +63,7 @@ export default function ChordSheet({ song, isFavorite, onToggleFavorite }: Props
           <h2 className="text-xl font-bold text-gray-900">{song.title}</h2>
           <p className="text-sm text-gray-500 mt-0.5">{song.artist} • {song.year}年</p>
           {song.capo > 0 && (
-            <span className="mt-2 inline-block text-xs text-blue-600 font-mono">♪{song.capo}</span>
+            <span className="mt-2 inline-block text-xs text-blue-600 font-mono">カポ {song.capo}</span>
           )}
         </div>
         <button
