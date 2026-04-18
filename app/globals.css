@@ -9,3 +9,17 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+@keyframes vu-swing {
+  0%, 100% { transform: rotate(-55deg); }
+  20%       { transform: rotate(15deg);  }
+  40%       { transform: rotate(-8deg);  }
+  60%       { transform: rotate(30deg);  }
+  80%       { transform: rotate(5deg);   }
+}
+
+.vu-needle {
+  animation: vu-swing 2.3s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 40px 50px;
+}

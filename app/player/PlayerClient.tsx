@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { Icon } from '@iconify/react'
-import { Song, Source, PlayMode, Decade } from '@/types'
+import { Song, Source, PlayMode } from '@/types'
 import YouTubePlayer, { YouTubePlayerRef } from '@/components/player/YouTubePlayer'
 import ChordSheet from '@/components/player/ChordSheet'
 import { getSongsByDecade, getSongsByIds, getRandomSongFromList, getSongById } from '@/lib/songs/index'
@@ -27,6 +27,90 @@ const PLAY_MODE_LABEL: Record<PlayMode, string> = {
   'repeat-one': 'リピート',
 }
 
+// ── ラジカセボタン ──────────────────────────────────────────────
+function BbBtn({
+  icon, label, onClick, disabled = false, active = false, asLink,
+}: {
+  icon: string; label: string; onClick?: () => void
+  disabled?: boolean; active?: boolean; asLink?: string
+}) {
+  const cls = [
+    'flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-lg border transition-all select-none min-w-[42px]',
+    active
+      ? 'bg-amber-800 border-amber-600 text-amber-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]'
+      : 'bg-zinc-700 border-zinc-500 text-zinc-300 shadow-[0_3px_0_rgba(0,0,0,0.6)] hover:bg-zinc-600 active:translate-y-px active:shadow-none',
+    disabled ? 'opacity-30 cursor-not-allowed pointer-events-none' : '',
+  ].join(' ')
+
+  if (asLink) {
+    return (
+      <Link href={asLink} className={cls}>
+        <Icon icon={icon} className="text-lg" />
+        <span className="text-[10px] font-bold tracking-wider leading-none">{label}</span>
+      </Link>
+    )
+  }
+  return (
+    <button onClick={onClick} disabled={disabled} className={cls}>
+      <Icon icon={icon} className="text-lg" />
+      <span className="text-[10px] font-bold tracking-wider leading-none">{label}</span>
+    </button>
+  )
+}
+
+// ── つまみ ───────────────────────────────────────────────────────
+function Knob({ size = 34, rotation = 0 }: { size?: number; rotation?: number }) {
+  return (
+    <div
+      className="rounded-full border-2 border-zinc-600 relative flex-shrink-0"
+      style={{
+        width: size, height: size,
+        background: 'radial-gradient(circle at 38% 32%, #52525b, #18181b 75%)',
+        boxShadow: '0 3px 8px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.07)',
+        transform: `rotate(${rotation}deg)`,
+      }}
+    >
+      <div
+        className="absolute bg-zinc-400 rounded-full"
+        style={{ width: 3, top: '11%', left: '50%', transform: 'translateX(-50%)', height: '28%' }}
+      />
+    </div>
+  )
+}
+
+// ── VUメーター ───────────────────────────────────────────────────
+function VUMeter() {
+  return (
+    <svg width="68" height="46" viewBox="0 0 80 56" className="flex-shrink-0">
+      <rect x="2" y="2" width="76" height="52" rx="5" fill="#0a0a0a" stroke="#3f3f46" strokeWidth="1.5" />
+      {/* アーク背景 */}
+      <path d="M 13 50 A 27 27 0 0 1 67 50" fill="none" stroke="#14532d" strokeWidth="5" />
+      <path d="M 57 28 A 27 27 0 0 1 67 50" fill="none" stroke="#7f1d1d" strokeWidth="5" />
+      {/* 目盛り */}
+      {Array.from({ length: 9 }).map((_, i) => {
+        const angle = -90 + (i / 8) * 180
+        const rad = (angle * Math.PI) / 180
+        const r = 25, cx = 40, cy = 50
+        const len = i % 2 === 0 ? 7 : 4
+        return (
+          <line
+            key={i}
+            x1={cx + (r - len) * Math.cos(rad)} y1={cy + (r - len) * Math.sin(rad)}
+            x2={cx + r * Math.cos(rad)}           y2={cy + r * Math.sin(rad)}
+            stroke={i >= 6 ? '#f87171' : '#4ade80'}
+            strokeWidth={i % 2 === 0 ? 1.5 : 1}
+          />
+        )
+      })}
+      {/* 針 */}
+      <line x1="40" y1="50" x2="40" y2="25" stroke="#fbbf24" strokeWidth="1.5" strokeLinecap="round" className="vu-needle" />
+      <circle cx="40" cy="50" r="3" fill="#52525b" stroke="#71717a" strokeWidth="1" />
+      <text x="40" y="57" textAnchor="middle" fontSize="6" fill="#52525b" fontFamily="monospace" letterSpacing="1">VU</text>
+    </svg>
+  )
+}
+
+// ── メインコンポーネント ─────────────────────────────────────────
 export default function PlayerClient({ initialSong, source, songId }: Props) {
   const [song, setSong] = useState<Song | null>(initialSong ?? null)
   const [videoId, setVideoId] = useState<string>(initialSong?.youtubeId ?? '')
@@ -35,7 +119,6 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   const [playMode, setPlayMode] = useState<PlayMode>('autoplay')
   const [favSongs, setFavSongs] = useState<Song[]>([])
   const [favLoaded, setFavLoaded] = useState(false)
-  // 曲が自然に終わって次曲へ遷移した場合のみtrue。リロード時はfalseにリセットされる
   const [shouldAutoplay, setShouldAutoplay] = useState(false)
   const [songHistory, setSongHistory] = useState<Song[]>([])
 
@@ -43,7 +126,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   const ytRef = useRef<YouTubePlayerRef>(null)
 
   const isFavoritesMode = source === 'favorites'
-  const decadeSongs = !isFavoritesMode ? getSongsByDecade(source as Decade) : []
+  const decadeSongs = !isFavoritesMode ? getSongsByDecade(source as import('@/types').Decade) : []
 
   useEffect(() => {
     try {
@@ -66,14 +149,11 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
       }
 
       const storedMode = localStorage.getItem('gcr-play-mode') as PlayMode | null
-      if (storedMode && PLAY_MODES.includes(storedMode)) {
-        setPlayMode(storedMode)
-      }
+      if (storedMode && PLAY_MODES.includes(storedMode)) setPlayMode(storedMode)
     } catch {}
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // 曲が変わるたびにYouTube動画IDを解決 + last-song保存
   useEffect(() => {
     if (!song) return
     transitioning.current = false
@@ -81,10 +161,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
     resolveVideoId(song.id, song.artist, song.title, song.youtubeId)
       .then((id) => setVideoId(id))
       .finally(() => setSearching(false))
-
-    try {
-      localStorage.setItem('gcr-last-song', JSON.stringify({ songId: song.id, source }))
-    } catch {}
+    try { localStorage.setItem('gcr-last-song', JSON.stringify({ songId: song.id, source })) } catch {}
   }, [song, source])
 
   const isFavorite = song ? favorites.includes(song.id) : false
@@ -92,12 +169,8 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   const toggleFavorite = useCallback(() => {
     if (!song) return
     setFavorites((prev) => {
-      const next = prev.includes(song.id)
-        ? prev.filter((id) => id !== song.id)
-        : [...prev, song.id]
-      try {
-        localStorage.setItem('gcr-favorites', JSON.stringify(next))
-      } catch {}
+      const next = prev.includes(song.id) ? prev.filter((id) => id !== song.id) : [...prev, song.id]
+      try { localStorage.setItem('gcr-favorites', JSON.stringify(next)) } catch {}
       return next
     })
   }, [song])
@@ -131,16 +204,13 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
 
   if (isFavoritesMode && favLoaded && favSongs.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-6 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 gap-6 text-center bg-zinc-900">
         <div className="text-5xl">🤍</div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">お気に入りがまだありません</h2>
-          <p className="text-gray-500 text-sm">曲を聴きながら ❤️ を押して追加してください</p>
+          <h2 className="text-xl font-bold text-zinc-100 mb-2">お気に入りがまだありません</h2>
+          <p className="text-zinc-500 text-sm">曲を聴きながら ❤️ を押して追加してください</p>
         </div>
-        <Link
-          href="/"
-          className="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm shadow-md transition-colors"
-        >
+        <Link href="/" className="px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm shadow-md transition-colors">
           年代選択に戻る
         </Link>
       </div>
@@ -148,94 +218,89 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* ヘッダー */}
-      <header className="flex items-center px-4 py-2 bg-white border-b border-gray-200 sticky top-0 z-10">
-        {/* 左: 戻る + 前の曲 */}
-        <div className="flex items-center gap-1">
-          <Link
-            href="/"
-            className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
-            aria-label="ホームへ戻る"
-          >
-            <Icon icon="mdi:home" className="text-xl" />
-            <span className="text-xs">戻る</span>
-          </Link>
-          <button
-            onClick={prevSong}
-            disabled={songHistory.length === 0}
-            className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-gray-500 hover:text-gray-900 hover:bg-gray-100 disabled:hover:bg-transparent"
-            aria-label="前の曲"
-          >
-            <Icon icon="mdi:skip-previous" className="text-xl" />
-            <span className="text-xs">前の曲</span>
-          </button>
-        </div>
-
-        {/* 中央: 再生モード（3ボタン） */}
-        <div className="flex-1 flex justify-center gap-1">
-          {PLAY_MODES.map((mode) => {
-            const active = playMode === mode
-            return (
-              <button
+    <div className="min-h-screen bg-zinc-900 flex flex-col">
+      {/* ── ヘッダー: コントロールパネル ── */}
+      <header
+        className="sticky top-0 z-10 bg-zinc-800 border-b-2 border-zinc-600 px-3 py-2"
+        style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.6)' }}
+      >
+        <div className="flex items-center justify-between gap-1 max-w-lg mx-auto">
+          {/* 左 */}
+          <div className="flex items-center gap-1">
+            <BbBtn icon="mdi:arrow-left-bold" label="戻る" asLink="/" />
+            <BbBtn icon="mdi:skip-previous" label="前の曲" onClick={prevSong} disabled={songHistory.length === 0} />
+          </div>
+          {/* 中央: 再生モード */}
+          <div className="flex items-center gap-1">
+            {PLAY_MODES.map((mode) => (
+              <BbBtn
                 key={mode}
+                icon={PLAY_MODE_ICON[mode]}
+                label={PLAY_MODE_LABEL[mode]}
+                active={playMode === mode}
                 onClick={() => {
                   setPlayMode(mode)
                   try { localStorage.setItem('gcr-play-mode', mode) } catch {}
                 }}
-                className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors ${
-                  active
-                    ? 'bg-amber-500 text-white'
-                    : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
-                }`}
-                aria-label={PLAY_MODE_LABEL[mode]}
-                aria-pressed={active}
-              >
-                <Icon icon={PLAY_MODE_ICON[mode]} className="text-xl" />
-                <span className="text-xs">{PLAY_MODE_LABEL[mode]}</span>
-              </button>
-            )
-          })}
+              />
+            ))}
+          </div>
+          {/* 右 */}
+          <BbBtn icon="mdi:skip-next" label="次の曲" onClick={nextSong} />
         </div>
-
-        {/* 右: 次の曲 */}
-        <button
-          onClick={nextSong}
-          className="flex flex-col items-center gap-0.5 w-12 text-gray-500 hover:text-gray-900 transition-colors"
-          aria-label="次の曲"
-        >
-          <Icon icon="mdi:skip-next" className="text-xl" />
-          <span className="text-xs">次の曲</span>
-        </button>
       </header>
 
-      {/* メインコンテンツ */}
-      <main className="flex-1 flex flex-col lg:flex-row gap-0 max-w-6xl mx-auto w-full">
-        {/* 左：YouTube */}
-        <div className="lg:w-1/2 p-3 lg:p-6 lg:border-r border-gray-200">
-          {searching || !song ? (
-            <div className="w-full h-[32vh] md:aspect-video bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-sm">
-              {searching ? '動画を検索中...' : '読み込み中...'}
+      {/* ── ボディ ── */}
+      <main className="flex-1 flex flex-col max-w-lg mx-auto w-full">
+        {/* スクリーンエリア */}
+        <div className="px-3 pt-3">
+          <div
+            className="rounded-2xl overflow-hidden border-2 border-zinc-600"
+            style={{
+              background: 'linear-gradient(to bottom, #27272a, #18181b)',
+              boxShadow: 'inset 0 0 24px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.5)',
+            }}
+          >
+            <div className="p-2.5">
+              <div className="rounded-xl overflow-hidden border border-zinc-700 bg-black">
+                {searching || !song ? (
+                  <div className="w-full aspect-video flex items-center justify-center text-zinc-500 text-sm font-mono tracking-widest">
+                    {searching ? '▶ SEARCHING...' : '■ LOADING...'}
+                  </div>
+                ) : (
+                  <YouTubePlayer
+                    ref={ytRef}
+                    videoId={videoId}
+                    onEnded={handleEnded}
+                    autoplay={shouldAutoplay}
+                  />
+                )}
+              </div>
             </div>
-          ) : (
-            <YouTubePlayer
-              ref={ytRef}
-              videoId={videoId}
-              onEnded={handleEnded}
-              autoplay={shouldAutoplay}
-            />
+          </div>
+        </div>
+
+        {/* コード譜エリア */}
+        <div className="flex-1 px-3 py-3">
+          {song && (
+            <ChordSheet song={song} isFavorite={isFavorite} onToggleFavorite={toggleFavorite} />
           )}
         </div>
 
-        {/* 右：コード譜 */}
-        <div className="lg:w-1/2 p-3 lg:p-6 flex flex-col">
-          {song && (
-            <ChordSheet
-              song={song}
-              isFavorite={isFavorite}
-              onToggleFavorite={toggleFavorite}
-            />
-          )}
+        {/* ── ボトム: ラジカセ底面 ── */}
+        <div
+          className="border-t-2 border-zinc-600 px-5 py-3"
+          style={{ background: 'linear-gradient(to bottom, #27272a, #18181b)' }}
+        >
+          <div className="flex items-center justify-between">
+            <Knob size={32} rotation={-40} />
+            <Knob size={26} rotation={25} />
+            <VUMeter />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/image/gcr-logo-en.png" alt="Guitar Chord Radio" className="h-8 w-auto object-contain" />
+            <Knob size={26} rotation={-15} />
+            <Knob size={32} rotation={60} />
+          </div>
         </div>
       </main>
     </div>
