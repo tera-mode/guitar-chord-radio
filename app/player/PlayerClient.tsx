@@ -34,6 +34,8 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
   const [playMode, setPlayMode] = useState<PlayMode>('autoplay')
   const [favSongs, setFavSongs] = useState<Song[]>([])
   const [favLoaded, setFavLoaded] = useState(false)
+  // 曲が自然に終わって次曲へ遷移した場合のみtrue。リロード時はfalseにリセットされる
+  const [shouldAutoplay, setShouldAutoplay] = useState(false)
 
   const transitioning = useRef(false)
   const ytRef = useRef<YouTubePlayerRef>(null)
@@ -108,6 +110,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
 
   const handleEnded = useCallback(() => {
     if (playMode === 'autoplay') {
+      setShouldAutoplay(true)
       nextSong()
     } else if (playMode === 'repeat-one') {
       ytRef.current?.replay()
@@ -196,6 +199,7 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
               ref={ytRef}
               videoId={videoId}
               onEnded={handleEnded}
+              autoplay={shouldAutoplay}
             />
           )}
         </div>

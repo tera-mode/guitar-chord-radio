@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 're
 type Props = {
   videoId: string
   onEnded?: () => void
+  autoplay?: boolean
 }
 
 export type YouTubePlayerRef = {
@@ -23,7 +24,7 @@ const SPEEDS = [0.5, 0.75, 1.0] as const
 type Speed = (typeof SPEEDS)[number]
 
 const YouTubePlayer = forwardRef<YouTubePlayerRef, Props>(function YouTubePlayer(
-  { videoId, onEnded },
+  { videoId, onEnded, autoplay },
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -60,6 +61,7 @@ const YouTubePlayer = forwardRef<YouTubePlayerRef, Props>(function YouTubePlayer
           rel: 0,
           modestbranding: 1,
           playsinline: 1,
+          autoplay: autoplay ? 1 : 0,
         },
         events: {
           onReady: () => setReady(true),
