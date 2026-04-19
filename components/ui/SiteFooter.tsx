@@ -11,15 +11,15 @@ export default function SiteFooter() {
       {/* リンク行 */}
       <nav className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 mb-3">
         {[
-          { label: '運営会社', href: 'https://laiv.jp' },
-          { label: 'プライバシーポリシー', href: '/privacy' },
-          { label: '利用規約', href: '/terms' },
+          { label: '運営会社', href: 'https://www.laiv.jp/' },
+          { label: 'プライバシーポリシー', href: 'https://www.laiv.jp/privacy' },
+          { label: '利用規約', href: 'https://www.laiv.jp/terms' },
         ].map(({ label, href }) => (
           <a
             key={label}
             href={href}
-            target={href.startsWith('http') ? '_blank' : undefined}
-            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               fontFamily: 'var(--font-geist-sans), Inter, system-ui',
               fontSize: 11,
