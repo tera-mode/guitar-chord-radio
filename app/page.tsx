@@ -2,39 +2,10 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Icon } from '@iconify/react'
 import { Decade } from '@/types'
 import { getSongById } from '@/lib/songs/index'
-
-// ── カセットテープSVG ──────────────────────────────────────────
-function CassetteSVG({ color = '#52525b' }: { color?: string }) {
-  return (
-    <svg width="64" height="42" viewBox="0 0 64 42" fill="none">
-      <rect x="1" y="3" width="62" height="36" rx="4" fill="#18181b" stroke="#3f3f46" strokeWidth="1.5" />
-      {/* ラベル窓 */}
-      <rect x="7" y="9" width="50" height="20" rx="2" fill="#0a0a0a" stroke="#3f3f46" strokeWidth="1" />
-      {/* 左リール */}
-      <circle cx="20" cy="19" r="7.5" fill="#0a0a0a" stroke={color} strokeWidth="1.5" />
-      <circle cx="20" cy="19" r="3" fill="#27272a" stroke="#71717a" strokeWidth="1" />
-      <line x1="20" y1="12" x2="20" y2="15" stroke={color} strokeWidth="1" />
-      <line x1="20" y1="23" x2="20" y2="26" stroke={color} strokeWidth="1" />
-      <line x1="13.5" y1="16" x2="16" y2="17.5" stroke={color} strokeWidth="1" />
-      <line x1="24" y1="20.5" x2="26.5" y2="22" stroke={color} strokeWidth="1" />
-      {/* 右リール */}
-      <circle cx="44" cy="19" r="7.5" fill="#0a0a0a" stroke={color} strokeWidth="1.5" />
-      <circle cx="44" cy="19" r="3" fill="#27272a" stroke="#71717a" strokeWidth="1" />
-      <line x1="44" y1="12" x2="44" y2="15" stroke={color} strokeWidth="1" />
-      <line x1="44" y1="23" x2="44" y2="26" stroke={color} strokeWidth="1" />
-      <line x1="37.5" y1="16" x2="40" y2="17.5" stroke={color} strokeWidth="1" />
-      <line x1="48" y1="20.5" x2="50.5" y2="22" stroke={color} strokeWidth="1" />
-      {/* テープライン */}
-      <path d="M 12 27 Q 20 24 27 27 L 37 27 Q 44 24 52 27" stroke="#52525b" strokeWidth="1" fill="none" />
-      {/* 底面ノッチ */}
-      <rect x="24" y="37" width="16" height="2" rx="1" fill="#3f3f46" />
-    </svg>
-  )
-}
-
 
 // ── VUメーター (小) ──────────────────────────────────────────────
 function VUMeter() {
@@ -80,28 +51,24 @@ function Knob({ size = 30, rotation = 0 }: { size?: number; rotation?: number })
 }
 
 // ── 年代データ ───────────────────────────────────────────────────
-const DECADES: {
-  value: Decade; label: string; sub: string
-  accent: string; reelColor: string; icon: string
-}[] = [
-  {
-    value: '80s', label: '80年代', sub: "80's HITS",
-    accent: 'border-orange-600', reelColor: '#ea580c', icon: 'mdi:guitar-electric',
-  },
-  {
-    value: '90s', label: '90年代', sub: "90's HITS",
-    accent: 'border-amber-500', reelColor: '#d97706', icon: 'mdi:guitar-acoustic',
-  },
-  {
-    value: '2000s', label: '2000年代', sub: "2000's HITS",
-    accent: 'border-teal-600', reelColor: '#0d9488', icon: 'mdi:music-note-eighth',
-  },
+const DECADES: { value: Decade; label: string; en: string; freq: string; accent: string }[] = [
+  { value: '80s', label: '80年代', en: "80'S HITS", freq: '1980.0', accent: 'oklch(0.68 0.17 30)' },
+  { value: '90s', label: '90年代', en: "90'S HITS", freq: '1990.0', accent: 'oklch(0.72 0.15 80)' },
+  { value: '2000s', label: '2000年代', en: "2000'S HITS", freq: '2000.0', accent: 'oklch(0.70 0.13 180)' },
 ]
+
+const NEEDLE_POSITIONS = [0.18, 0.5, 0.82]
+
+// ルートスペクトル
+const ROOT_ORDER = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+const ROOT_COLORS = ROOT_ORDER.map((_, i) => `oklch(0.62 0.17 ${(i / 12) * 360})`)
 
 type LastSong = { songId: string; source: string }
 
 // ── メインページ ─────────────────────────────────────────────────
 export default function HomePage() {
+  const router = useRouter()
+  const [selectedIdx, setSelectedIdx] = useState(1)
   const [lastSong, setLastSong] = useState<LastSong | null>(null)
   const [lastSongTitle, setLastSongTitle] = useState<string | null>(null)
   const [lastSongArtist, setLastSongArtist] = useState<string | null>(null)
@@ -118,110 +85,310 @@ export default function HomePage() {
     } catch {}
   }, [])
 
+  const selected = DECADES[selectedIdx]
+  const needleLeft = NEEDLE_POSITIONS[selectedIdx]
+
   return (
-    <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center px-4 py-8"
+      style={{ background: '#1a1512' }}>
       <div className="w-full max-w-sm flex flex-col gap-0">
 
         {/* ── ブランドパネル ── */}
         <div
-          className="rounded-t-3xl border-2 border-b-0 border-zinc-600 px-5 pt-6 pb-4"
+          className="rounded-t-3xl border-2 border-b-0 px-5 pt-6 pb-5 text-center"
           style={{
             background: 'linear-gradient(to bottom, #27272a, #1c1c1e)',
+            borderColor: 'oklch(0.27 0.015 55)',
             boxShadow: 'inset 0 2px 12px rgba(0,0,0,0.6)',
           }}
         >
-          {/* メインロゴ */}
-          <div className="mb-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/image/gcr-logo.png" alt="Guitar Chord Radio" className="w-full h-20 object-contain" />
+          {/* テキストロゴ */}
+          <div
+            style={{
+              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+              fontStyle: 'italic',
+              fontWeight: 700,
+              fontSize: 30,
+              background: 'linear-gradient(180deg, #f5d68e, #b8892f 50%, #8b6018)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              letterSpacing: 0.5,
+              lineHeight: 1.1,
+            }}
+          >
+            Guitar Chord Radio
           </div>
-
-          {/* 周波数チューナーバー */}
-          <div className="bg-zinc-950 rounded-lg border border-zinc-700 px-3 py-2 shadow-inner">
-            <div className="flex justify-between text-[9px] font-mono text-zinc-600 mb-1">
-              <span>76</span><span>80</span><span>86</span><span>90</span><span>96</span><span>100</span><span>108</span>
-            </div>
-            <div className="relative h-0.5 bg-zinc-700 mx-1">
-              {[0, 14.3, 28.6, 42.9, 57.1, 71.4, 100].map((p) => (
-                <div key={p} className="absolute bg-zinc-600" style={{ left: `${p}%`, width: 1, height: 6, top: -2 }} />
-              ))}
-              {/* 針 - 90MHzあたりに固定 */}
-              <div className="absolute bg-red-500" style={{ left: '43%', width: 2, height: 14, top: -6, transform: 'translateX(-50%)' }} />
-            </div>
-            <div className="text-right text-[9px] font-mono text-zinc-600 mt-1">MHz</div>
+          <div
+            className="mt-1"
+            style={{
+              fontFamily: 'var(--font-geist-sans), Inter, system-ui',
+              fontWeight: 500,
+              fontSize: 13,
+              color: 'oklch(0.85 0.02 60)',
+              letterSpacing: 4,
+              opacity: 0.85,
+            }}
+          >
+            ギターコードラジオ
           </div>
-
-          {/* キャッチコピー */}
-          <div className="mt-3 bg-zinc-950 rounded-lg border border-zinc-700 px-3 py-2 shadow-inner">
-            <p className="text-xs text-green-400 font-mono tracking-wide leading-relaxed">
-              &gt; ギターを構えた30秒後には、<br />
-              &nbsp;&nbsp;もう弾いている。
-            </p>
+          <div
+            className="mt-1"
+            style={{
+              fontFamily: 'var(--font-geist-mono), "Space Mono", monospace',
+              fontSize: 9,
+              color: 'oklch(0.62 0.02 60)',
+              letterSpacing: 3,
+            }}
+          >
+            FM ・ STEREO ・ ONLINE
           </div>
         </div>
 
         {/* ── メインボディ ── */}
         <div
-          className="border-x-2 border-zinc-600 px-4 py-4 flex flex-col gap-3"
-          style={{ background: '#1a1a1c' }}
+          className="border-x-2 px-4 py-4 flex flex-col gap-3"
+          style={{ background: '#1a1512', borderColor: 'oklch(0.27 0.015 55)' }}
         >
+
+          {/* ── チューニングダイアルパネル ── */}
+          <div
+            className="rounded-2xl px-4 py-4"
+            style={{
+              background: 'oklch(0.19 0.015 55)',
+              border: '1px solid oklch(0.27 0.015 55)',
+              boxShadow: 'inset 0 1px 0 oklch(0.30 0.015 55), 0 2px 8px rgba(0,0,0,0.4)',
+            }}
+          >
+            {/* ヘッダー行 */}
+            <div className="flex items-center justify-between mb-3">
+              <span
+                style={{
+                  fontFamily: 'var(--font-geist-mono), monospace',
+                  fontSize: 10,
+                  color: 'oklch(0.62 0.02 60)',
+                  letterSpacing: 2,
+                }}
+              >
+                TUNING ▸ {selected.en}
+              </span>
+              <div
+                style={{
+                  fontFamily: 'var(--font-geist-mono), monospace',
+                  fontSize: 10,
+                  color: selected.accent,
+                  border: `1px solid ${selected.accent}`,
+                  borderRadius: 10,
+                  padding: '1px 7px',
+                  boxShadow: `0 0 8px ${selected.accent}44`,
+                  transition: 'color 0.3s, border-color 0.3s, box-shadow 0.3s',
+                }}
+              >
+                ● LIVE
+              </div>
+            </div>
+
+            {/* 周波数ディスプレイ */}
+            <div
+              className="rounded-lg px-3 py-3"
+              style={{
+                background: '#000',
+                border: '1px solid oklch(0.27 0.015 55)',
+                boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.8)',
+              }}
+            >
+              {/* 周波数読み取り */}
+              <div className="flex items-baseline justify-center gap-2 mb-2">
+                <div
+                  style={{
+                    fontFamily: 'var(--font-geist-mono), monospace',
+                    fontSize: 38,
+                    fontWeight: 700,
+                    color: selected.accent,
+                    letterSpacing: -0.5,
+                    lineHeight: 1,
+                    textShadow: `0 0 12px ${selected.accent}88`,
+                    transition: 'color 0.3s, text-shadow 0.3s',
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
+                  {selected.freq}
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-geist-mono), monospace',
+                    fontSize: 14,
+                    color: 'oklch(0.62 0.02 60)',
+                  }}
+                >
+                  kHz
+                </div>
+              </div>
+
+              {/* ダイアルルーラー */}
+              <div style={{ position: 'relative', height: 42, marginTop: 8 }}>
+                {/* ティック */}
+                <div style={{ position: 'absolute', top: 14, left: 0, right: 0, height: 20 }}>
+                  {Array.from({ length: 60 }).map((_, i) => (
+                    <div key={i} style={{
+                      position: 'absolute',
+                      left: `${(i / 59) * 100}%`,
+                      top: 0,
+                      width: 1,
+                      height: i % 5 === 0 ? 14 : 7,
+                      background: 'oklch(0.62 0.02 60)',
+                      opacity: 0.5,
+                    }} />
+                  ))}
+                </div>
+                {/* 周波数ラベル */}
+                {DECADES.map((d, i) => (
+                  <div key={d.value} style={{
+                    position: 'absolute',
+                    left: `${NEEDLE_POSITIONS[i] * 100}%`,
+                    top: 0,
+                    transform: 'translateX(-50%)',
+                    fontFamily: 'var(--font-geist-mono), monospace',
+                    fontSize: 8,
+                    color: d.accent,
+                    letterSpacing: 1,
+                    opacity: i === selectedIdx ? 1 : 0.5,
+                    transition: 'opacity 0.3s',
+                  }}>{d.freq}</div>
+                ))}
+                {/* 針 */}
+                <div style={{
+                  position: 'absolute',
+                  left: `${needleLeft * 100}%`,
+                  top: 10,
+                  bottom: 0,
+                  width: 2,
+                  background: selected.accent,
+                  boxShadow: `0 0 8px ${selected.accent}`,
+                  transform: 'translateX(-50%)',
+                  transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, box-shadow 0.3s',
+                }} />
+                {/* 針ドット */}
+                <div style={{
+                  position: 'absolute',
+                  left: `${needleLeft * 100}%`,
+                  top: 6,
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  background: selected.accent,
+                  boxShadow: `0 0 10px ${selected.accent}`,
+                  transform: 'translate(-50%, 0)',
+                  transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, box-shadow 0.3s',
+                }} />
+              </div>
+
+              {/* 年代チップ */}
+              <div className="flex gap-1.5 mt-2">
+                {DECADES.map((d, i) => (
+                  <button
+                    key={d.value}
+                    onClick={() => setSelectedIdx(i)}
+                    className="flex-1 py-1.5 rounded text-xs font-bold transition-all"
+                    style={{
+                      fontFamily: 'var(--font-geist-mono), monospace',
+                      fontSize: 11,
+                      letterSpacing: 1,
+                      background: i === selectedIdx ? `${d.accent}22` : 'transparent',
+                      border: `1px solid ${i === selectedIdx ? d.accent : 'oklch(0.27 0.015 55)'}`,
+                      color: i === selectedIdx ? d.accent : 'oklch(0.62 0.02 60)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* TUNE IN ボタン */}
+            <button
+              onClick={() => router.push(`/player?decade=${selected.value}`)}
+              className="w-full mt-3 py-3 rounded-lg font-bold text-sm transition-all active:scale-[0.98]"
+              style={{
+                background: selected.accent,
+                border: 'none',
+                color: '#000',
+                fontFamily: 'var(--font-geist-sans), Inter, system-ui',
+                fontSize: 14,
+                fontWeight: 700,
+                letterSpacing: 1,
+                cursor: 'pointer',
+                boxShadow: `0 0 16px ${selected.accent}55, inset 0 -2px 0 rgba(0,0,0,0.2)`,
+                transition: 'background 0.3s, box-shadow 0.3s',
+              }}
+            >
+              TUNE IN ▸ {selected.label}
+            </button>
+          </div>
+
           {/* 続きから */}
           {lastSong && (
             <Link
               href={`/player?source=${lastSong.source}&songId=${lastSong.songId}`}
-              className="flex items-center gap-3 rounded-xl border border-zinc-600 px-3 py-2.5 transition-all hover:border-amber-600 active:scale-[0.98] group"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all active:scale-[0.98] group"
               style={{
-                background: 'linear-gradient(to right, #27272a, #1c1c1e)',
-                boxShadow: '0 3px 0 rgba(0,0,0,0.5)',
+                background: 'oklch(0.22 0.012 55)',
+                border: '1px solid oklch(0.27 0.015 55)',
               }}
             >
+              {/* ミニEQ */}
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border border-zinc-500 group-hover:border-amber-500 transition-colors"
-                style={{ background: 'radial-gradient(circle at 35% 30%, #52525b, #18181b 75%)' }}
-              >
-                <Icon icon="mdi:play" className="text-amber-400 text-lg ml-0.5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[10px] text-zinc-500 font-mono tracking-widest">RESUME</div>
-                <div className="text-sm font-bold text-zinc-100 truncate">{lastSongTitle ?? '続きから再生'}</div>
-                {lastSongArtist && (
-                  <div className="text-[11px] text-zinc-500 font-mono truncate">{lastSongArtist}</div>
-                )}
-              </div>
-              <Icon icon="mdi:chevron-right" className="text-zinc-600 text-xl flex-shrink-0 group-hover:text-amber-500 transition-colors" />
-            </Link>
-          )}
-
-          {/* 年代カード (カセットテープ風) */}
-          <div className="flex flex-col gap-2">
-            <div className="text-[10px] text-zinc-600 font-mono tracking-widest px-1">── SELECT STATION ──</div>
-            {DECADES.map((d) => (
-              <Link
-                key={d.value}
-                href={`/player?decade=${d.value}`}
-                className={`flex items-center gap-4 rounded-xl border-2 px-3 py-3 transition-all hover:brightness-110 active:scale-[0.98] active:translate-y-px ${d.accent}`}
+                className="flex items-end justify-center gap-0.5 flex-shrink-0 rounded"
                 style={{
-                  background: 'linear-gradient(to right, #27272a, #1c1c1e)',
-                  boxShadow: '0 4px 0 rgba(0,0,0,0.6)',
+                  width: 36, height: 26, background: '#000',
+                  border: '1px solid oklch(0.27 0.015 55)',
+                  padding: 3,
                 }}
               >
-                <CassetteSVG color={d.reelColor} />
-                <div className="flex-1 min-w-0">
-                  <div className="text-lg font-black text-zinc-100 leading-none">{d.label}</div>
-                  <div className="text-[11px] text-zinc-500 font-mono mt-0.5 tracking-wider">{d.sub}</div>
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <div key={i} style={{
+                    width: 3,
+                    background: 'oklch(0.70 0.17 45)',
+                    height: `${30 + (i * 14) % 55}%`,
+                    borderRadius: 1,
+                  }} />
+                ))}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div
+                  style={{
+                    fontFamily: 'var(--font-geist-mono), monospace',
+                    fontSize: 9,
+                    color: 'oklch(0.62 0.02 60)',
+                    letterSpacing: 2,
+                  }}
+                >
+                  LAST TUNED
                 </div>
-                <Icon icon={d.icon} className="text-2xl text-zinc-600" />
-              </Link>
-            ))}
-          </div>
+                <div className="text-sm font-bold text-zinc-100 truncate">{lastSongTitle ?? '続きから再生'}</div>
+                {lastSongArtist && (
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-geist-mono), monospace',
+                      fontSize: 11,
+                      color: 'oklch(0.62 0.02 60)',
+                    }}
+                    className="truncate"
+                  >{lastSongArtist}</div>
+                )}
+              </div>
+              <Icon icon="mdi:chevron-double-right" className="text-zinc-600 text-lg flex-shrink-0 group-hover:text-amber-500 transition-colors" />
+            </Link>
+          )}
 
           {/* お気に入り */}
           <Link
             href="/player?source=favorites"
-            className="flex items-center gap-3 rounded-xl border border-zinc-600 px-3 py-2.5 transition-all hover:border-red-700 active:scale-[0.98] group"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all active:scale-[0.98] group"
             style={{
-              background: 'linear-gradient(to right, #1c1015, #1a1a1c)',
-              boxShadow: '0 3px 0 rgba(0,0,0,0.5)',
+              background: 'oklch(0.22 0.012 55)',
+              border: '1px solid oklch(0.27 0.015 55)',
             }}
           >
             <div
@@ -231,17 +398,61 @@ export default function HomePage() {
               <Icon icon="mdi:heart" className="text-red-500 text-lg" />
             </div>
             <div className="flex-1">
-              <div className="text-[10px] text-zinc-600 font-mono tracking-widest">FAVORITES</div>
+              <div
+                style={{
+                  fontFamily: 'var(--font-geist-mono), monospace',
+                  fontSize: 9,
+                  color: 'oklch(0.62 0.02 60)',
+                  letterSpacing: 2,
+                }}
+              >FAVORITES</div>
               <div className="text-sm font-bold text-zinc-100">お気に入り</div>
             </div>
             <Icon icon="mdi:chevron-right" className="text-zinc-600 text-xl flex-shrink-0 group-hover:text-red-500 transition-colors" />
           </Link>
+
+          {/* ルートスペクトル */}
+          <div
+            className="rounded-xl px-3 py-2.5"
+            style={{
+              background: 'oklch(0.19 0.015 55)',
+              border: '1px solid oklch(0.27 0.015 55)',
+            }}
+          >
+            <div
+              className="mb-2"
+              style={{
+                fontFamily: 'var(--font-geist-mono), monospace',
+                fontSize: 9,
+                color: 'oklch(0.62 0.02 60)',
+                letterSpacing: 2,
+              }}
+            >ROOT SPECTRUM</div>
+            <div className="flex gap-0.5">
+              {ROOT_ORDER.map((n, i) => (
+                <div key={n} className="flex-1 flex flex-col items-center">
+                  <div style={{ height: 10, background: ROOT_COLORS[i], borderRadius: 2, width: '100%' }} />
+                  <div
+                    className="mt-0.5"
+                    style={{
+                      fontFamily: 'var(--font-geist-mono), monospace',
+                      fontSize: 7,
+                      color: 'oklch(0.62 0.02 60)',
+                    }}
+                  >{n}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* ── ボトムデコレーション ── */}
         <div
-          className="rounded-b-3xl border-2 border-t-0 border-zinc-600 px-5 py-3"
-          style={{ background: 'linear-gradient(to bottom, #1c1c1e, #18181b)' }}
+          className="rounded-b-3xl border-2 border-t-0 px-5 py-3"
+          style={{
+            background: 'linear-gradient(to bottom, #1c1c1e, #18181b)',
+            borderColor: 'oklch(0.27 0.015 55)',
+          }}
         >
           <div className="flex items-center justify-between">
             <Knob size={30} rotation={-40} />

@@ -42,4 +42,10 @@ export const chordDiagrams: Record<string, ChordDiagram> = {
   Dsus4: { name: 'Dsus4', strings: ['x', 'x', 'o', 'o', 'o', 'o'], frets: [[3, 2], [2, 3], [1, 3]], baseFret: 1 },
   Asus4: { name: 'Asus4', strings: ['x', 'o', 'o', 'o', 'o', 'o'], frets: [[4, 2], [3, 2], [2, 3]], baseFret: 1 },
   Esus4: { name: 'Esus4', strings: ['o', 'o', 'o', 'o', 'o', 'o'], frets: [[5, 2], [4, 2], [3, 2]], baseFret: 1 },
+  // ── 追加コード ──
+  Gaug: { name: 'Gaug', strings: ['o', 'o', 'o', 'o', 'o', 'o'], frets: [[6, 3], [5, 2], [4, 1], [1, 3]], baseFret: 1 },
+  Cm: { name: 'Cm', strings: ['x', 'o', 'o', 'o', 'o', 'o'], frets: [[5, 3], [4, 5], [3, 5], [2, 4], [1, 3]], baseFret: 3 },
+  Bm7: { name: 'Bm7', strings: ['x', 'o', 'o', 'o', 'o', 'o'], frets: [[5, 2], [3, 2], [2, 3], [1, 2]], baseFret: 1 },
+  Gsus4: { name: 'Gsus4', strings: ['o', 'o', 'o', 'o', 'o', 'o'], frets: [[6, 3], [5, 3], [1, 3]], baseFret: 1 },
+  Dm9: { name: 'Dm9', strings: ['x', 'x', 'o', 'o', 'o', 'o'], frets: [[3, 2], [2, 1]], baseFret: 1 },
 }

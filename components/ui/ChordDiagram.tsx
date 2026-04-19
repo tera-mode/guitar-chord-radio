@@ -8,6 +8,7 @@ type Props = {
   name: string
   compact?: boolean
   extraCompact?: boolean
+  tile?: boolean
 }
 
 type DiagramData = {
@@ -170,6 +171,28 @@ const DIAGRAMS: Record<string, DiagramData> = {
     frets: [[5, 2], [4, 2], [3, 2]],
     baseFret: 1,
   },
+  // ── 追加コード ──
+  Gaug: {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[6, 3], [5, 2], [4, 1], [1, 3]],
+    baseFret: 1,
+  },
+  Cm: {
+    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    frets: [[4, 5], [3, 5], [2, 4]],
+    baseFret: 3,
+    barre: [3, 1],
+  },
+  Bm7: {
+    strings: ['-', 'o', 'o', 'o', 'o', '-'],
+    frets: [[5, 2], [3, 2], [2, 3], [1, 2]],
+    baseFret: 1,
+  },
+  Gsus4: {
+    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    frets: [[6, 3], [5, 3], [1, 3]],
+    baseFret: 1,
+  },
 }
 
 const STRING_COUNT = 6
@@ -207,11 +230,21 @@ const SIZES = {
     FONT: 7,
     SMALL_FONT: 5,
   },
+  tile: {
+    W: 54, H: 36,
+    ML: 9,
+    MR: 3,
+    MT: 4,
+    MB: 2,
+    DOT_R: 2.3,
+    FONT: 0,
+    SMALL_FONT: 4,
+  },
 }
 
-export default function ChordDiagram({ name, compact = false, extraCompact = false }: Props) {
+export default function ChordDiagram({ name, compact = false, extraCompact = false, tile = false }: Props) {
   const data = DIAGRAMS[name]
-  const sizeKey = extraCompact ? 'extra-compact' : compact ? 'compact' : 'normal'
+  const sizeKey = tile ? 'tile' : extraCompact ? 'extra-compact' : compact ? 'compact' : 'normal'
   const { W, H, ML, MR, MT, MB, DOT_R, FONT, SMALL_FONT } = SIZES[sizeKey]
 
   const gridW = W - ML - MR
@@ -240,12 +273,14 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
     <div className="flex flex-col items-center">
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
         {/* コード名 */}
-        <text
-          x={W / 2} y={MT - 6}
-          textAnchor="middle" fontSize={FONT} fontWeight="bold" fill="#1f2937"
-        >
-          {name}
-        </text>
+        {!tile && (
+          <text
+            x={W / 2} y={MT - 6}
+            textAnchor="middle" fontSize={FONT} fontWeight="bold" fill="#1f2937"
+          >
+            {name}
+          </text>
+        )}
 
         {/* ナット（太線）or baseFret番号 */}
         {baseFret === 1 ? (
