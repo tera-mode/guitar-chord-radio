@@ -44,7 +44,7 @@ export default function SiteFooter() {
           letterSpacing: 0.5,
         }}
       >
-        © 2025 LAIV LLC. All rights reserved.
+        © 2026 LAIV LLC. All rights reserved.
       </p>
     </footer>
   )
