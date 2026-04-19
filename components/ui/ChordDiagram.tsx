@@ -346,9 +346,9 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
         {strings.map((s, idx) => {
           const str = strNumFromIdx(idx)
           const y = strY(str)
-          const cx = ML - (extraCompact ? 6 : compact ? 8 : 11)
-          const r = extraCompact ? 2 : compact ? 2.5 : 4
-          const cr = extraCompact ? 1.5 : compact ? 2 : 3
+          const cx = ML - (tile ? 5 : extraCompact ? 6 : compact ? 8 : 11)
+          const r = tile ? 1.8 : extraCompact ? 2 : compact ? 2.5 : 4
+          const cr = tile ? 1.2 : extraCompact ? 1.5 : compact ? 2 : 3
 
           if (s === 'o') {
             return (
