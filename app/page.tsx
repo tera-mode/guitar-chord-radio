@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Icon } from '@iconify/react'
 import { Decade } from '@/types'
 import { getSongById } from '@/lib/songs/index'
+import SiteFooter from '@/components/ui/SiteFooter'
 
 // ── VUメーター (小) ──────────────────────────────────────────────
 function VUMeter() {
@@ -469,6 +470,11 @@ export default function HomePage() {
           </div>
         </div>
 
+      </div>
+
+      {/* フッター */}
+      <div className="w-full max-w-sm mt-2">
+        <SiteFooter />
       </div>
     </div>
   )

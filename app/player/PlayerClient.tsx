@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react'
 import { Song, Source, PlayMode } from '@/types'
 import YouTubePlayer, { YouTubePlayerRef } from '@/components/player/YouTubePlayer'
 import ChordSheet from '@/components/player/ChordSheet'
+import SiteFooter from '@/components/ui/SiteFooter'
 import { getSongsByDecade, getSongsByIds, getRandomSongFromList, getSongById } from '@/lib/songs/index'
 import { resolveVideoId } from '@/lib/youtubeSearch'
 
@@ -302,6 +303,9 @@ export default function PlayerClient({ initialSong, source, songId }: Props) {
             <Knob size={32} rotation={60} />
           </div>
         </div>
+
+        {/* フッター */}
+        <SiteFooter />
       </main>
     </div>
   )
