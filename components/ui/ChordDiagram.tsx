@@ -22,174 +22,175 @@ type DiagramData = {
 }
 
 const DIAGRAMS: Record<string, DiagramData> = {
+  // idx: 0=6弦(E低), 1=5弦(A), 2=4弦(D), 3=3弦(G), 4=2弦(B), 5=1弦(e高)
   C: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
-    frets: [[5, 1], [3, 2], [2, 3]],
+    strings: ['x', '-', '-', 'o', '-', 'o'],  // x32010
+    frets: [[5, 3], [4, 2], [2, 1]],
     baseFret: 1,
   },
   D: {
-    strings: ['-', '-', 'o', 'o', 'o', 'x'],
-    frets: [[1, 2], [2, 3], [3, 2]],
+    strings: ['x', 'x', 'o', '-', '-', '-'],  // xx0232
+    frets: [[3, 2], [2, 3], [1, 2]],
     baseFret: 1,
   },
   E: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['o', '-', '-', '-', 'o', 'o'],  // 022100
     frets: [[5, 2], [4, 2], [3, 1]],
     baseFret: 1,
   },
   Em: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['o', '-', '-', 'o', 'o', 'o'],  // 022000
     frets: [[5, 2], [4, 2]],
     baseFret: 1,
   },
   F: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['-', '-', '-', '-', '-', '-'],  // 133211
     frets: [[5, 3], [4, 3], [3, 2]],
     baseFret: 1,
     barre: [1, 1],
   },
   G: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['-', '-', 'o', 'o', 'o', '-'],  // 320003
     frets: [[6, 3], [5, 2], [1, 3]],
     baseFret: 1,
   },
   A: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'o', '-', '-', '-', 'o'],  // x02220
     frets: [[4, 2], [3, 2], [2, 2]],
     baseFret: 1,
   },
   Am: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'o', '-', '-', '-', 'o'],  // x02210
     frets: [[4, 2], [3, 2], [2, 1]],
     baseFret: 1,
   },
   Dm: {
-    strings: ['-', '-', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'x', 'o', '-', '-', '-'],  // xx0231
     frets: [[3, 2], [2, 3], [1, 1]],
     baseFret: 1,
   },
   Bm: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', '-', '-', '-'],  // x24432
     frets: [[4, 4], [3, 4], [2, 3]],
     baseFret: 2,
     barre: [2, 1],
   },
   B: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', '-', '-', '-'],  // x24442
     frets: [[4, 4], [3, 4], [2, 4]],
     baseFret: 2,
     barre: [2, 1],
   },
   'C#m': {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', '-', '-', '-'],  // x46654
     frets: [[4, 6], [3, 6], [2, 5]],
     baseFret: 4,
     barre: [4, 1],
   },
   // 7th chords
   D7: {
-    strings: ['-', '-', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'x', 'o', '-', '-', '-'],  // xx0212
     frets: [[3, 2], [2, 1], [1, 2]],
     baseFret: 1,
   },
   G7: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['-', '-', 'o', 'o', 'o', '-'],  // 320001
     frets: [[6, 3], [5, 2], [1, 1]],
     baseFret: 1,
   },
   C7: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', '-', '-', 'o'],  // x32310
     frets: [[5, 3], [4, 2], [3, 3], [2, 1]],
     baseFret: 1,
   },
   E7: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['o', '-', 'o', '-', '-', 'o'],  // 020130
     frets: [[5, 2], [3, 1], [2, 3]],
     baseFret: 1,
   },
   A7: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'o', '-', 'o', '-', 'o'],  // x02020
     frets: [[4, 2], [2, 2]],
     baseFret: 1,
   },
   B7: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', '-', 'o', '-'],  // x21202
     frets: [[5, 2], [4, 1], [3, 2], [1, 2]],
     baseFret: 1,
   },
   Em7: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['o', '-', '-', 'o', '-', 'o'],  // 022030
     frets: [[5, 2], [4, 2], [2, 3]],
     baseFret: 1,
   },
   Am7: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'o', '-', 'o', '-', 'o'],  // x02010
     frets: [[4, 2], [2, 1]],
     baseFret: 1,
   },
   Dm7: {
-    strings: ['-', '-', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'x', 'o', '-', '-', '-'],  // xx0211
     frets: [[3, 2], [2, 1], [1, 1]],
     baseFret: 1,
   },
   // バレーコード
   'F#m': {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['-', '-', '-', '-', '-', '-'],  // 244222
     frets: [[5, 4], [4, 4]],
     baseFret: 2,
     barre: [2, 1],
   },
   'G#m': {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
-    frets: [[5, 6], [4, 6], [3, 5]],
+    strings: ['-', '-', '-', '-', '-', '-'],  // 466444
+    frets: [[5, 6], [4, 6]],
     baseFret: 4,
     barre: [4, 1],
   },
   // sus4 / maj7
   Fmaj7: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', '-', '-', 'o'],  // x33210
     frets: [[5, 3], [4, 3], [3, 2], [2, 1]],
     baseFret: 1,
   },
   Cmaj7: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', 'o', 'o', 'o'],  // x32000
     frets: [[5, 3], [4, 2]],
     baseFret: 1,
   },
   Dsus4: {
-    strings: ['-', '-', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'x', 'o', '-', '-', '-'],  // xx0233
     frets: [[3, 2], [2, 3], [1, 3]],
     baseFret: 1,
   },
   Asus4: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', 'o', '-', '-', '-', 'o'],  // x02230
     frets: [[4, 2], [3, 2], [2, 3]],
     baseFret: 1,
   },
   Esus4: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['o', '-', '-', '-', 'o', 'o'],  // 022200
     frets: [[5, 2], [4, 2], [3, 2]],
     baseFret: 1,
   },
   // ── 追加コード ──
   Gaug: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['-', '-', '-', 'o', 'o', '-'],  // 321003
     frets: [[6, 3], [5, 2], [4, 1], [1, 3]],
     baseFret: 1,
   },
   Cm: {
-    strings: ['-', 'o', 'o', 'o', 'o', 'x'],
+    strings: ['x', '-', '-', '-', '-', '-'],  // x35543
     frets: [[4, 5], [3, 5], [2, 4]],
     baseFret: 3,
     barre: [3, 1],
   },
   Bm7: {
-    strings: ['-', 'o', 'o', 'o', 'o', '-'],
+    strings: ['x', '-', 'o', '-', '-', '-'],  // x20232
     frets: [[5, 2], [3, 2], [2, 3], [1, 2]],
     baseFret: 1,
   },
   Gsus4: {
-    strings: ['o', 'o', 'o', 'o', 'o', 'o'],
+    strings: ['-', '-', 'o', 'o', 'o', '-'],  // 330033
     frets: [[6, 3], [5, 3], [1, 3]],
     baseFret: 1,
   },
