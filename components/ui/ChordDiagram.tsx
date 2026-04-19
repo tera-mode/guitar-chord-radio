@@ -246,6 +246,9 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
   const data = DIAGRAMS[name]
   const sizeKey = tile ? 'tile' : extraCompact ? 'extra-compact' : compact ? 'compact' : 'normal'
   const { W, H, ML, MR, MT, MB, DOT_R, FONT, SMALL_FONT } = SIZES[sizeKey]
+  const dotColor = tile ? '#e4e4e7' : '#1f2937'
+  const lineColor = tile ? '#71717a' : '#9ca3af'
+  const fretColor = tile ? '#52525b' : '#d1d5db'
 
   const gridW = W - ML - MR
   const gridH = H - MT - MB
@@ -284,9 +287,9 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
 
         {/* ナット（太線）or baseFret番号 */}
         {baseFret === 1 ? (
-          <rect x={ML} y={MT} width={compact || extraCompact ? 3 : 4} height={gridH} fill="#1f2937" />
+          <rect x={ML} y={MT} width={compact || extraCompact ? 3 : tile ? 2.5 : 4} height={gridH} fill={dotColor} />
         ) : (
-          <text x={ML - 2} y={MT + gridH / 2 + 3} textAnchor="end" fontSize={SMALL_FONT} fill="#6b7280">
+          <text x={ML - 2} y={MT + gridH / 2 + 3} textAnchor="end" fontSize={SMALL_FONT} fill={lineColor}>
             {baseFret}fr
           </text>
         )}
@@ -297,7 +300,7 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
             key={i}
             x1={ML + (i + 1) * FRET_SPACING} y1={MT}
             x2={ML + (i + 1) * FRET_SPACING} y2={MT + gridH}
-            stroke="#d1d5db" strokeWidth={1}
+            stroke={fretColor} strokeWidth={0.8}
           />
         ))}
 
@@ -307,7 +310,7 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
             key={i}
             x1={ML} y1={MT + i * STRING_SPACING}
             x2={ML + gridW} y2={MT + i * STRING_SPACING}
-            stroke="#9ca3af" strokeWidth={1}
+            stroke={lineColor} strokeWidth={0.8}
           />
         ))}
 
@@ -323,7 +326,7 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
               width={DOT_R * 2}
               height={y2 - y1 + DOT_R * 2}
               rx={DOT_R}
-              fill="#1f2937"
+              fill={dotColor}
             />
           )
         })()}
@@ -335,7 +338,7 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
             cx={fretX(fret)}
             cy={strY(str)}
             r={DOT_R}
-            fill="#1f2937"
+            fill={dotColor}
           />
         ))}
 
@@ -349,14 +352,14 @@ export default function ChordDiagram({ name, compact = false, extraCompact = fal
 
           if (s === 'o') {
             return (
-              <circle key={idx} cx={cx} cy={y} r={r} stroke="#1f2937" strokeWidth={1.2} fill="none" />
+              <circle key={idx} cx={cx} cy={y} r={r} stroke={dotColor} strokeWidth={1.2} fill="none" />
             )
           }
           if (s === 'x') {
             return (
               <g key={idx}>
-                <line x1={cx - cr} y1={y - cr} x2={cx + cr} y2={y + cr} stroke="#1f2937" strokeWidth={1.2} />
-                <line x1={cx + cr} y1={y - cr} x2={cx - cr} y2={y + cr} stroke="#1f2937" strokeWidth={1.2} />
+                <line x1={cx - cr} y1={y - cr} x2={cx + cr} y2={y + cr} stroke={dotColor} strokeWidth={1.2} />
+                <line x1={cx + cr} y1={y - cr} x2={cx - cr} y2={y + cr} stroke={dotColor} strokeWidth={1.2} />
               </g>
             )
           }
