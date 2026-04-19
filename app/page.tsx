@@ -142,7 +142,7 @@ export default function HomePage() {
               letterSpacing: 3,
             }}
           >
-            FM ・ STEREO ・ ONLINE
+            QUICK ・ FUN ・ NOSTALGIC
           </div>
         </div>
 
