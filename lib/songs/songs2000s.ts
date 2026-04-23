@@ -9,7 +9,7 @@ export const songs2000s: Song[] = [
     year: 2001,
     decade: '2000s',
     genre: 'rock',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'j7CDb610Bg0',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Am', 'D'] },
@@ -27,7 +27,7 @@ export const songs2000s: Song[] = [
     year: 2005,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: '1wxTksLZ1Mw',
     sections: [
       { label: 'イントロ', chords: ['C', 'G', 'Am', 'Em', 'F', 'C', 'G'] },
       { label: 'Aメロ', chords: ['C', 'G', 'Am', 'Em', 'F', 'C', 'G', 'G'] },
@@ -45,7 +45,7 @@ export const songs2000s: Song[] = [
     year: 2001,
     decade: '2000s',
     genre: 'rock',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'JoJ6lnF07U4',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'C', 'D'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'C', 'D'] },
@@ -64,7 +64,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'TngUo1gDNOg',
     sections: [
       { label: 'イントロ', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F'] },
       { label: 'Aメロ', chords: ['C', 'G', 'Am', 'Em', 'F', 'C', 'G', 'G'] },
@@ -82,7 +82,7 @@ export const songs2000s: Song[] = [
     year: 2003,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'p_2F2lKV9uA',
     sections: [
       { label: 'イントロ', chords: ['G', 'Am', 'Dsus4', 'D', 'G', 'Am', 'Dsus4', 'D'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'Am', 'C', 'D', 'G', 'D'] },
@@ -100,7 +100,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'PRJoAPH0ZGo',
     sections: [
       { label: 'イントロ', chords: ['C', 'G', 'Am', 'F'] },
       { label: 'Aメロ', chords: ['C', 'G', 'Am', 'Em', 'F', 'G', 'C', 'G'] },
@@ -136,7 +136,7 @@ export const songs2000s: Song[] = [
     year: 2007,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'WPH1BLHKOJE',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Am', 'D'] },
@@ -154,7 +154,7 @@ export const songs2000s: Song[] = [
     year: 2000,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'AGYJ6jeu3p8',
     sections: [
       { label: 'イントロ', chords: ['Am', 'G', 'F', 'Em'] },
       { label: 'Aメロ', chords: ['Am', 'G', 'F', 'Em', 'Am', 'G', 'Dm', 'E'] },
@@ -172,7 +172,7 @@ export const songs2000s: Song[] = [
     year: 2002,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'VOPmfA-N4Rw',
     sections: [
       { label: 'イントロ', chords: ['C', 'G', 'Am', 'F'] },
       { label: 'Aメロ', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G'] },
@@ -190,7 +190,7 @@ export const songs2000s: Song[] = [
     year: 2000,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'uOv48wstbgY',
     sections: [
       { label: 'イントロ', chords: ['G', 'Em', 'C', 'D'] },
       { label: 'Aメロ', chords: ['G', 'Em', 'Am', 'D', 'G', 'Em', 'Am', 'D'] },
@@ -208,7 +208,7 @@ export const songs2000s: Song[] = [
     year: 2003,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'qZq-q75KeMw',
     sections: [
       { label: 'イントロ', chords: ['C', 'F', 'G', 'Am'] },
       { label: 'Aメロ', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G'] },
@@ -226,7 +226,7 @@ export const songs2000s: Song[] = [
     year: 2001,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'yPCno5Tk4ik',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'Am', 'C', 'G', 'D', 'D'] },
@@ -244,7 +244,7 @@ export const songs2000s: Song[] = [
     year: 2001,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'iqGHxcTPRfI',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'Am', 'G', 'D', 'D'] },
@@ -262,7 +262,7 @@ export const songs2000s: Song[] = [
     year: 2003,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'upODO6OuOOk',
     sections: [
       { label: 'イントロ', chords: ['C', 'G', 'Am', 'F'] },
       { label: 'Aメロ', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G'] },
@@ -280,7 +280,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 't6xdg6TKbyQ',
     sections: [
       { label: 'イントロ', chords: ['G', 'Em', 'C', 'D'] },
       { label: 'Aメロ', chords: ['G', 'Em', 'Am', 'D', 'G', 'Em', 'Am', 'D'] },
@@ -298,7 +298,7 @@ export const songs2000s: Song[] = [
     year: 2008,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'EXxaBXKjl6Q',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Am', 'D'] },
@@ -316,7 +316,7 @@ export const songs2000s: Song[] = [
     year: 2006,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'xXA5StMti8c',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Bm7', 'Em'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Bm7', 'Em', 'C', 'G', 'Am', 'D'] },
@@ -334,7 +334,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'rock',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'cr8magEp0Ho',
     sections: [
       { label: 'イントロ', chords: ['Am', 'Em', 'Dm', 'Am'] },
       { label: 'Aメロ', chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E'] },
@@ -352,7 +352,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'rock',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'Aq6gMHBobcA',
     sections: [
       { label: 'イントロ', chords: ['G', 'Em', 'C', 'D'] },
       { label: 'Aメロ', chords: ['G', 'Em', 'Am', 'D', 'G', 'Em', 'C', 'D'] },
@@ -370,7 +370,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'rock',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'mTdcxQZcQAE',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Am', 'D'] },
@@ -388,7 +388,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'UNRJyBHziX4',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Am', 'D'] },
@@ -406,7 +406,7 @@ export const songs2000s: Song[] = [
     year: 2006,
     decade: '2000s',
     genre: 'rock',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'gmLXEmCExIE',
     sections: [
       { label: 'イントロ', chords: ['Am', 'F', 'C', 'G'] },
       { label: 'Aメロ', chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'G'] },
@@ -424,7 +424,7 @@ export const songs2000s: Song[] = [
     year: 2010,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'VZBU8LvZ91Q',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Am', 'D'] },
@@ -442,7 +442,7 @@ export const songs2000s: Song[] = [
     year: 2007,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'nMROhyihehU',
     sections: [
       { label: 'イントロ', chords: ['Am', 'F', 'G', 'C'] },
       { label: 'Aメロ', chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'G'] },
@@ -460,7 +460,7 @@ export const songs2000s: Song[] = [
     year: 2003,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'Dsdxxrnz1AQ',
     sections: [
       { label: 'イントロ', chords: ['G', 'Em', 'C', 'D'] },
       { label: 'Aメロ', chords: ['G', 'Em', 'C', 'D', 'G', 'Em', 'Am', 'D'] },
@@ -478,7 +478,7 @@ export const songs2000s: Song[] = [
     year: 2004,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: '2TWJOvc-css',
     sections: [
       { label: 'イントロ', chords: ['G', 'Am', 'Dsus4', 'D'] },
       { label: 'Aメロ', chords: ['G', 'Em', 'Am', 'D', 'G', 'Em', 'C', 'D'] },
@@ -514,7 +514,7 @@ export const songs2000s: Song[] = [
     year: 2000,
     decade: '2000s',
     genre: 'rock',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'bnlstlAfdJU',
     sections: [
       { label: 'イントロ', chords: ['G', 'D', 'Em', 'C'] },
       { label: 'Aメロ', chords: ['G', 'D', 'Am', 'C', 'G', 'D', 'Am', 'D'] },
@@ -532,7 +532,7 @@ export const songs2000s: Song[] = [
     year: 2003,
     decade: '2000s',
     genre: 'jpop',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: '2EdarX_Lf2Q',
     sections: [
       { label: 'イントロ', chords: ['G', 'C', 'G', 'D'] },
       { label: 'Aメロ', chords: ['G', 'D', 'C', 'G', 'G', 'D', 'Am', 'D'] },

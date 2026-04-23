@@ -52,3 +52,8 @@ next-env.d.ts
 # playtest artifacts
 docs/playtests/screenshots/
 docs/playtests/notes/
+
+# コード譜PDF（著作権保護のため絶対に公開禁止）
+# docs/chord/ 配下のPDFは個人利用のローカル参考資料
+docs/chord/
+*.pdf
